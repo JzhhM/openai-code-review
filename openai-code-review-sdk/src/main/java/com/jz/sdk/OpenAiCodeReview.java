@@ -35,6 +35,8 @@ public class OpenAiCodeReview {
     System.out.println("Exited with code:" + exitCode);
 
     System.out.println("评审代码：" + diffCode.toString());
+
+    // 2. chatglm 代码评审
   }
 
 
