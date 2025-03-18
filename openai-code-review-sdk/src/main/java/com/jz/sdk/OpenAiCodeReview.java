@@ -9,7 +9,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.concurrent.*;
 
 /**
  * 代码评审工具
@@ -142,18 +141,5 @@ public class OpenAiCodeReview {
     // 解析 JSON 响应
     ChatCompletionSyncResponseDTO response = JSON.parseObject(content.toString(), ChatCompletionSyncResponseDTO.class);
     return response.toString();
-  }
-
-  /**
-   * 读取输入流，防止阻塞
-   */
-  private static String readStream(InputStream inputStream) throws IOException {
-    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-    StringBuilder result = new StringBuilder();
-    String line;
-    while ((line = reader.readLine()) != null) {
-      result.append(line).append("\n");
-    }
-    return result.toString();
   }
 }
