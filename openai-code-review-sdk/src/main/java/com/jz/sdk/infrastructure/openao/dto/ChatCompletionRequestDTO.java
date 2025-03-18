@@ -8,8 +8,9 @@ import java.util.List;
  */
 public class ChatCompletionRequestDTO {
 
-  private String model = "deepseek-reasoner";
+  private String model = "deepseek-chat";
   private List<Prompt> messages;
+  private Boolean stream = false;
 
   public static class Prompt {
     private String role;
@@ -39,6 +40,14 @@ public class ChatCompletionRequestDTO {
       this.content = content;
     }
 
+  }
+
+  public Boolean getStream(){
+    return stream;
+  }
+
+  private void setStream(Boolean stream){
+    this.stream = stream;
   }
 
   public String getModel() {

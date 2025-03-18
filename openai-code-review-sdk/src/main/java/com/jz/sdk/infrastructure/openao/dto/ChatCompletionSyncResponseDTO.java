@@ -26,6 +26,8 @@ public class ChatCompletionSyncResponseDTO {
     private String role;
     private String content;
 
+
+
     public String getRole() {
       return role;
     }
@@ -41,6 +43,14 @@ public class ChatCompletionSyncResponseDTO {
     public void setContent(String content) {
       this.content = content;
     }
+
+    @Override
+    public String toString() {
+      return "Message{" +
+          "role='" + role + '\'' +
+          ", content='" + content + '\'' +
+          '}';
+    }
   }
 
   public List<Choice> getChoices() {
@@ -51,4 +61,10 @@ public class ChatCompletionSyncResponseDTO {
     this.choices = choices;
   }
 
+  @Override
+  public String toString() {
+    return "ChatCompletionSyncResponseDTO{" +
+        "choices=" + choices +
+        '}';
+  }
 }
