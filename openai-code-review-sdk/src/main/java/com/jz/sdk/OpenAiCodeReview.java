@@ -16,30 +16,40 @@ import java.util.concurrent.*;
  */
 public class OpenAiCodeReview {
 
-  public static void main(String[] args) throws Exception {
-    System.out.println("测试执行");
 
-    // 1. 代码检出
-    ProcessBuilder processBuilder = new ProcessBuilder("git", "diff", "HEAD~1", "HEAD");
-    processBuilder.directory(new File("."));
+  public static String diff() throws IOException, InterruptedException {
+    ProcessBuilder logProcessBuilder = new ProcessBuilder("git", "log", "-1", "--pretty=format:%H");
+    logProcessBuilder.directory(new File("."));
+    Process logProcess = logProcessBuilder.start();
 
-    Process process = processBuilder.start();
-    ExecutorService executor = Executors.newFixedThreadPool(2);
+    BufferedReader logReader = new BufferedReader(new InputStreamReader(logProcess.getInputStream()));
+    String latestCommitHash = logReader.readLine();
+    logReader.close();
+    logProcess.waitFor();
 
-    Future<String> stdoutFuture = executor.submit(() -> readStream(process.getInputStream()));
-    Future<String> stderrFuture = executor.submit(() -> readStream(process.getErrorStream()));
+    ProcessBuilder diffProcessBuilder = new ProcessBuilder("git", "diff", latestCommitHash + "^", latestCommitHash);
+    diffProcessBuilder.directory(new File("."));
+    Process diffProcess = diffProcessBuilder.start();
 
-    int exitCode = process.waitFor();
-    executor.shutdown();
+    StringBuilder diffCode = new StringBuilder();
+    BufferedReader diffReader = new BufferedReader(new InputStreamReader(diffProcess.getInputStream()));
+    String line;
+    while ((line = diffReader.readLine()) != null) {
+      diffCode.append(line).append("\n");
+    }
+    diffReader.close();
 
+    int exitCode = diffProcess.waitFor();
     if (exitCode != 0) {
-      System.out.println("Git diff 失败: " + stderrFuture.get());
-      return;
+      throw new RuntimeException("Failed to get diff, exit code:" + exitCode);
     }
 
-    String diffCode = stdoutFuture.get();
-    System.out.println("diff code:\n" + diffCode);
+    return diffCode.toString();
+  }
 
+
+  public static void main(String[] args) throws Exception {
+    String diffCode = diff();
     // 2. DeepSeek 代码评审
     String log = codeReview(diffCode);
     System.out.println("code review:\n" + log);
@@ -98,8 +108,8 @@ public class OpenAiCodeReview {
             "{变量3}\n" +
             "#### \uD83D\uDCBB修改后的代码：\n" +
             "{变量4}\n" +
-            "`;代码如下:\n" + diff));
-//        add(new ChatCompletionRequestDTO.Prompt("user", diff));
+            "`;代码如下:\n"));
+        add(new ChatCompletionRequestDTO.Prompt("user", diff));
       }
     });
 

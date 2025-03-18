@@ -2,10 +2,6 @@ package com.jz.sdk.infrastructure.openao.dto;
 
 import java.util.List;
 
-/**
- * @author meizhihao@millionlab.cn
- * @date 2025-03-18 14:08
- */
 public class ChatCompletionSyncResponseDTO {
 
   private List<Choice> choices;
@@ -20,13 +16,18 @@ public class ChatCompletionSyncResponseDTO {
     public void setMessage(Message message) {
       this.message = message;
     }
+
+    @Override
+    public String toString() {
+      return "Choice{" +
+          "message=" + message +
+          '}';
+    }
   }
 
   public static class Message {
     private String role;
     private String content;
-
-
 
     public String getRole() {
       return role;
