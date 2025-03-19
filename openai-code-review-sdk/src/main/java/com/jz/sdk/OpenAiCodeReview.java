@@ -17,18 +17,14 @@ public class OpenAiCodeReview {
   public static void main(String[] args) throws Exception {
     GitCommand gitCommand = new GitCommand();
 
-    IOpenAI openAI = new DeepSeek("https://api.deepseek.com/chat/completions", "sk-0f0e490708134fb487caa409e0f48659");
+    String openAiUrl = args[0];
+    String openAiKey = args[1];
+
+    IOpenAI openAI = new DeepSeek(openAiUrl, openAiKey);
 
     OpenAiCodeReviewService openAiCodeReviewService = new OpenAiCodeReviewService(gitCommand, openAI);
     openAiCodeReviewService.exec();
     logger.info("openai-code-review done!");
   }
 
-  private static String getEnv(String key) {
-    String value = System.getenv(key);
-    if (null == value || value.isEmpty()) {
-      throw new RuntimeException("value is null");
-    }
-    return value;
-  }
 }

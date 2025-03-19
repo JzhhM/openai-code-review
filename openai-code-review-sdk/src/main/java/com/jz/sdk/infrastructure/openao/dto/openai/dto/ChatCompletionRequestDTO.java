@@ -12,6 +12,15 @@ public class ChatCompletionRequestDTO {
 
   private String model = Model.DEEP_SEEK_REASONER.getCode();
   private List<Prompt> messages;
+  private Integer maxTokens = 8192;
+
+  public Integer getMaxTokens() {
+    return maxTokens;
+  }
+
+  public void setMaxTokens(Integer maxTokens) {
+    this.maxTokens = maxTokens;
+  }
 
   public static class Prompt {
     private String role;
