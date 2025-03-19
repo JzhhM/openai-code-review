@@ -1,4 +1,6 @@
-package com.jz.sdk.infrastructure.openao.dto;
+package com.jz.sdk.infrastructure.openao.dto.openai.dto;
+
+import com.jz.sdk.domain.model.Model;
 
 import java.util.List;
 
@@ -8,9 +10,8 @@ import java.util.List;
  */
 public class ChatCompletionRequestDTO {
 
-  private String model = "deepseek-chat";
+  private String model = Model.DEEP_SEEK_REASONER.getCode();
   private List<Prompt> messages;
-  private Boolean stream = false;
 
   public static class Prompt {
     private String role;
@@ -40,14 +41,6 @@ public class ChatCompletionRequestDTO {
       this.content = content;
     }
 
-  }
-
-  public Boolean getStream(){
-    return stream;
-  }
-
-  private void setStream(Boolean stream){
-    this.stream = stream;
   }
 
   public String getModel() {

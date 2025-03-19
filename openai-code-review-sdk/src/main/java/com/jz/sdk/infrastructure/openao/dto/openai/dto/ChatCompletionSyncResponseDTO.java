@@ -1,4 +1,4 @@
-package com.jz.sdk.infrastructure.openao.dto;
+package com.jz.sdk.infrastructure.openao.dto.openai.dto;
 
 import java.util.List;
 
